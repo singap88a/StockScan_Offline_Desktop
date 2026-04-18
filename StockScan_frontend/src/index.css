@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased bg-gray-50 text-gray-900 font-cairo;
+  }
+
+  ::selection {
+    background-color: #dbeafe; /* primary-100 */
+    color: #1d4ed8; /* primary-700 */
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  }
+  
+  .glass-dark {
+    @apply bg-gray-900/70 backdrop-blur-md border border-gray-800/20;
+  }
+
+  .card-gradient {
+    @apply bg-gradient-to-br from-white to-gray-50/50;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
+}
+
+/* Fix for number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Optimized Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  #printable-invoice, #printable-invoice * {
+    visibility: visible;
+  }
+  
+  #printable-invoice {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6.5in !important; /* Standard receipt/A5 width approx */
+    margin: 0;
+    padding: 0;
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+  }
+
+  /* Hide UI elements */
+  aside, nav, button, .print\:hidden, .no-print {
+    display: none !important;
+  }
+
+  /* QR Code Specifics */
+  .print-qr {
+    width: 2in !important;
+    height: 2in !important;
+    margin: 10px auto;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  @page {
+    margin: 0;
+    size: auto;
+  }
+}
+
+.print-only {
+  display: none;
+}
