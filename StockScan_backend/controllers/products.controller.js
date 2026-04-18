@@ -81,7 +81,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   const allowedFields = ['name', 'barcode', 'sellPrice', 'price', 'costPrice', 'cost', 'discount', 'quantity', 'category', 'image'];
   allowedFields.forEach(f => { if (req.body[f] !== undefined) updates[f] = req.body[f]; });
 
-  const updated = await Product.findByIdAndUpdate(product._id, { $set: updates });
+  const updated = await Product.findByIdAndUpdate(product._id, { $set: updates }, { new: true });
   res.status(200).json({ success: true, data: updated });
 });
 

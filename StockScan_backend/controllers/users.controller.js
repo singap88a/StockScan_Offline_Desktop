@@ -5,23 +5,22 @@ const User = require('../models/User');
 // @route   GET /api/users
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
-  // Remove passwords from response
-  const safeUsers = users.map(({ password: _, ...u }) => u);
-  res.status(200).json({ success: true, count: safeUsers.length, data: safeUsers });
+  const users = await User.find({}).select('-password');
+  res.status(200).json({ success: true, count: users.length, data: users });
+
 });
 
 // @desc    Get single user
 // @route   GET /api/users/:id
 // @access  Private/Admin
 const getUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).select('-password');
   if (!user) {
     res.status(404);
     throw new Error('المستخدم غير موجود');
   }
-  const { password: _, ...safeUser } = user;
-  res.status(200).json({ success: true, data: safeUser });
+  res.status(200).json({ success: true, data: user });
+
 });
 
 // @desc    Create user
@@ -37,8 +36,10 @@ const createUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.create({ name, email, password, role });
-  const { password: _, ...safeUser } = user;
+  const safeUser = user.toObject();
+  delete safeUser.password;
   res.status(201).json({ success: true, data: safeUser });
+
 });
 
 // @desc    Update user
@@ -62,9 +63,11 @@ const updateUser = asyncHandler(async (req, res) => {
     updates.password = await User.hashPassword(req.body.password);
   }
 
-  const updated = await User.findByIdAndUpdate(user._id, { $set: updates });
-  const { password: _, ...safeUser } = updated;
+  const updated = await User.findByIdAndUpdate(user._id, { $set: updates }, { new: true });
+  const safeUser = updated.toObject();
+  delete safeUser.password;
   res.status(200).json({ success: true, data: safeUser });
+
 });
 
 // @desc    Delete user

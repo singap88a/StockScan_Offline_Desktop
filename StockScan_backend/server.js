@@ -13,7 +13,7 @@ const morgan = require('morgan');
 const { connectDB } = require('./config/db');
 const User = require('./models/User');
 
-// Initialize NeDB
+// Initialize MongoDB
 connectDB();
 
 const app = express();
@@ -92,7 +92,7 @@ const startServer = async () => {
   await ensureDefaultUsers();
 
   server = app.listen(PORT, () => {
-    console.log(`\n🚀 StockScan Offline Server running on port ${PORT}`);
+    console.log(`\n🚀 StockScan Online Server running on port ${PORT}`);
     console.log(`📡 API: http://localhost:${PORT}/api`);
   });
 };

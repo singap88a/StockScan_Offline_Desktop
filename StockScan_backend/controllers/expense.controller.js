@@ -35,7 +35,7 @@ const createExpense = asyncHandler(async (req, res) => {
 // @route   DELETE /api/expenses/:id
 // @access  Private/Admin
 const deleteExpense = asyncHandler(async (req, res) => {
-  const expense = await Expense.deleteOne(req.params.id);
+  await Expense.findByIdAndDelete(req.params.id);
   res.status(200).json({ success: true, message: 'تم حذف المصروف بنجاح' });
 });
 
@@ -45,15 +45,19 @@ const deleteExpense = asyncHandler(async (req, res) => {
 const updateExpense = asyncHandler(async (req, res) => {
   const { title, personName, amount, details, phone } = req.body;
 
-  const updatedExpense = await Expense.updateOne(req.params.id, {
-    title,
-    personName,
-    amount,
-    details,
-    phone,
-  });
+  const updatedExpense = await Expense.findByIdAndUpdate(
+    req.params.id,
+    { title, personName, amount, details, phone },
+    { new: true }
+  );
+
+  if (!updatedExpense) {
+    res.status(404);
+    throw new Error('المصروف غير موجود');
+  }
 
   res.status(200).json({ success: true, data: updatedExpense });
 });
+
 
 module.exports = { getExpenses, createExpense, deleteExpense, updateExpense };

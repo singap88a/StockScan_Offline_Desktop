@@ -1,0 +1,46 @@
+[
+  {
+    "_id": "69dcfe326daf463220ebe693",
+    "name": "مسؤول النظام",
+    "email": "admin@stockscan.com",
+    "password": "$2a$10$SsqaNWjoU0Fma2khA8Cm4exCt1CdpVAeggVYYi7pf7mapurSjpU7G",
+    "role": "admin",
+    "isActive": true,
+    "createdAt": "2026-04-13T14:31:14.688Z",
+    "updatedAt": "2026-04-13T14:31:14.688Z",
+    "__v": 0
+  },
+  {
+    "_id": "69dcfe326daf463220ebe695",
+    "name": "أحمد علي",
+    "email": "ahmed@stockscan.com",
+    "password": "$2a$10$9pebNHTbZaSCbd5nBGvBCu0k0aK/UBq81Wzx9cHd1UgQbJzgx5n7.",
+    "role": "cashier",
+    "isActive": true,
+    "createdAt": "2026-04-13T14:31:14.688Z",
+    "updatedAt": "2026-04-13T14:31:14.688Z",
+    "__v": 0
+  },
+  {
+    "_id": "69dcfe326daf463220ebe696",
+    "name": "سارة محمد",
+    "email": "sara@stockscan.com",
+    "password": "$2a$10$raDqZnH16x5ljtGW.ZpN.eO8YmKP5gzc4QfFBb7FIHVUMsNRksJci",
+    "role": "cashier",
+    "isActive": true,
+    "createdAt": "2026-04-13T14:31:14.688Z",
+    "updatedAt": "2026-04-13T14:31:14.688Z",
+    "__v": 0
+  },
+  {
+    "_id": "69dcfe326daf463220ebe694",
+    "name": "كاشير المبيعات",
+    "email": "cashier@stockscan.com",
+    "password": "$2a$10$POzxpoGOfe8WHESesJv.1OTebXaQEyzOP7lYDoZRAFKqSOWsz.e7i",
+    "role": "cashier",
+    "isActive": true,
+    "createdAt": "2026-04-13T14:31:14.688Z",
+    "updatedAt": "2026-04-13T14:31:14.688Z",
+    "__v": 0
+  }
+]

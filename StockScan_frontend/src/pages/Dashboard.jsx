@@ -75,7 +75,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
         <StatCard title="إجمالي المنتجات" value={fmt(stats?.totalProducts)} icon={Package} color="bg-primary-600" loading={loading} />
         <StatCard title="مبيعات المتجر" value={`${fmt(Math.round(stats?.totalStoreSales ?? 0))} ج.م`} icon={TrendingUp} color="bg-purple-600" loading={loading} />
         <StatCard 
@@ -87,23 +87,47 @@ export default function Dashboard() {
         />
         <StatCard title="مرتجعات اليوم" value={`${fmt(Math.round(stats?.todayRefunds ?? 0))} ج.م`} icon={RotateCcw} color="bg-orange-600" loading={loading} />
         <StatCard 
-          title="مصروفات المخزون" 
+          title="مصروفات اليوم" 
+          value={`${fmt(Math.round(stats?.todayExpensesAmt ?? 0))} ج.م`} 
+          icon={DollarSign} 
+          color="bg-rose-500" 
+          loading={loading} 
+        />
+        <StatCard 
+          title="مصروفات المخزون (الكل)" 
           value={`${fmt(Math.round(stats?.totalExpensesAmt ?? 0))} ج.م`} 
           icon={DollarSign} 
-          color="bg-rose-600" 
+          color="bg-rose-700" 
           loading={loading} 
         />
       </div>
 
-      {/* Net Indicator for transparency */}
-      {!loading && stats?.todayRefunds > 0 && (
-        <div className="bg-blue-50 border border-blue-100 p-4 rounded-2xl flex items-center justify-between text-blue-800 animate-in slide-in-from-top-2">
-            <div className="flex items-center gap-3 font-bold">
-                <Info className="w-5 h-5" />
-                <span>صافي مبيعات اليوم (بعد المرتجعات):</span>
-            </div>
-            <span className="text-xl font-black">{fmt(Math.round(stats?.todayNetSales ?? 0))} ج.م</span>
-        </div>
+      {/* Today's comprehensive stats stacked vertically */}
+      {!loading && (
+        <Card className="bg-white p-6 rounded-[2.5rem] border border-primary-100 shadow-xl shadow-primary-50 mt-2">
+          <h3 className="font-black text-gray-900 mb-5 flex items-center gap-3">
+             <div className="p-2 bg-primary-100 text-primary-600 rounded-xl"><ShoppingCart className="w-5 h-5"/></div>
+             حسابات وصافي اليوم
+          </h3>
+          <div className="space-y-4">
+             <div className="flex justify-between font-bold text-gray-600 pb-3 border-b border-gray-100">
+               <span>إجمالي مبيعات اليوم (قبل خصم المرتجعات والمصروفات)</span>
+               <span className="text-gray-900">{fmt(Math.round(stats?.todaySales ?? 0))} ج.م</span>
+             </div>
+             <div className="flex justify-between font-bold text-red-500 pb-3 border-b border-gray-100">
+               <span>مرتجعات اليوم (-)</span>
+               <span>{fmt(Math.round(stats?.todayRefunds ?? 0))} ج.م</span>
+             </div>
+             <div className="flex justify-between font-bold text-rose-500 pb-3 border-b border-gray-100">
+               <span>مصروفات اليوم (-)</span>
+               <span>{fmt(Math.round(stats?.todayExpensesAmt ?? 0))} ج.م</span>
+             </div>
+             <div className="flex justify-between font-black text-xl text-primary-600 bg-primary-50 p-4 rounded-xl">
+               <span>صافي مبيعات اليوم (النهائي المتواجد الآن بالخزينة)</span>
+               <span>{fmt(Math.round(stats?.todayNetSales ?? 0))} ج.م</span>
+             </div>
+          </div>
+        </Card>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

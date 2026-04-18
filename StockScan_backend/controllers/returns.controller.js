@@ -74,7 +74,11 @@ const createReturn = asyncHandler(async (req, res) => {
     throw new Error(`الكمية المطلوبة تتجاوز الكمية في الفاتورة (${targetItem.quantity})`);
   }
 
-  const refundAmount = (targetItem.unitPrice || targetItem.price || 0) * quantity;
+  const itemSubtotal = (targetItem.unitPrice || targetItem.price || 0) * quantity;
+  const invoiceSubtotal = invoice.subtotal || invoice.items.reduce((s, i) => s + ((i.unitPrice || i.price || 0) * i.quantity), 0) || 1; 
+  const proportion = itemSubtotal / invoiceSubtotal;
+  const apportionedDiscount = (invoice.discount || 0) * proportion;
+  const refundAmount = itemSubtotal - apportionedDiscount;
   
   // Robust cost fetching: check invoice item first, then fallback to Product model
   let costPerUnit = targetItem.costPrice || 0;

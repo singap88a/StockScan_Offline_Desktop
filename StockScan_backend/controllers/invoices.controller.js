@@ -118,7 +118,7 @@ const updateInvoice = asyncHandler(async (req, res) => {
     if (req.body[f] !== undefined) updates[f] = req.body[f];
   });
 
-  const updated = await Invoice.findByIdAndUpdate(invoice._id, { $set: updates });
+  const updated = await Invoice.findByIdAndUpdate(invoice._id, { $set: updates }, { new: true });
   res.status(200).json({ success: true, data: updated });
 });
 
@@ -135,7 +135,7 @@ const deleteInvoice = asyncHandler(async (req, res) => {
   // Restock items before deleting
   for (const item of invoice.items || []) {
     if (item.product) {
-      await Product.findByIdAndUpdate(item.product, { $inc: { quantity: item.quantity } });
+      await Product.findByIdAndUpdate(item.product, { $inc: { quantity: item.quantity } }, { new: true });
     }
   }
 
@@ -185,13 +185,12 @@ const createInvoice = asyncHandler(async (req, res) => {
     });
 
     // Decrement stock
-    await Product.findByIdAndUpdate(product._id, { $inc: { quantity: -item.quantity } });
+    await Product.findByIdAndUpdate(product._id, { $inc: { quantity: -item.quantity } }, { new: true });
   }
 
   const discountAmount = Number(discount) || 0;
-  const taxableAmount = subtotal - discountAmount;
-  const tax = taxableAmount * 0.14;
-  const total = taxableAmount + tax;
+  const total = subtotal - discountAmount;
+  const tax = 0; // Tax is completely removed
 
   const invoice = await Invoice.create({
     customer: customer || 'عميل نقدي',

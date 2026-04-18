@@ -95,8 +95,10 @@ const getDashboardStats = asyncHandler(async (req, res) => {
     User.countDocuments({}),
   ]);
 
-  const totalStoreSales = sum(allInvoices, 'total') - totalExpensesAmt; // Deduct all expenses from total store sales
-  const totalCumulativeProfit = (sum(allInvoices, 'total') - sum(allInvoices, 'totalCost')) - (sum(allReturns, 'refundAmount') - sum(allReturns, 'totalCost')) - totalExpensesAmt;
+  const validAllInvoices = allInvoices.filter(inv => inv.status !== 'cancelled');
+  const totalStoreSales = sum(validAllInvoices, 'total') - sum(allReturns, 'refundAmount') - totalExpensesAmt;
+  const totalCumulativeProfit = (sum(validAllInvoices, 'total') - sum(validAllInvoices, 'totalCost')) - (sum(allReturns, 'refundAmount') - sum(allReturns, 'totalCost')) - totalExpensesAmt;
+
 
   res.status(200).json({
     success: true,
@@ -116,6 +118,7 @@ const getDashboardStats = asyncHandler(async (req, res) => {
       todayRefunds: todayRefunds,
       totalInvoicesCount: allInvoices.length,
       totalExpensesAmt: totalExpensesAmt,
+      todayExpensesAmt: todayExpensesAmt,
     },
   });
 });

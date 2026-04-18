@@ -19,7 +19,7 @@ const login = asyncHandler(async (req, res) => {
     throw new Error('البريد الإلكتروني أو كلمة المرور غير صحيحة');
   }
 
-  const isMatch = await User.matchPassword(password, user.password);
+  const isMatch = await user.matchPassword(password);
   if (!isMatch) {
     res.status(401);
     throw new Error('البريد الإلكتروني أو كلمة المرور غير صحيحة');
@@ -30,7 +30,7 @@ const login = asyncHandler(async (req, res) => {
     throw new Error('هذا الحساب موقوف. تواصل مع المسؤول.');
   }
 
-  const token = User.getSignedJwtToken(user);
+  const token = user.getSignedJwtToken();
 
   res.status(200).json({
     success: true,

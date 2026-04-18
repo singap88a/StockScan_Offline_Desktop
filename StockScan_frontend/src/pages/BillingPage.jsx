@@ -56,7 +56,7 @@ const InvoicePaper = ({ invoice, isConfirmed }) => {
             <h2 className="text-2xl font-black text-gray-900 tracking-tighter">StockScan</h2>
             <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Digital Retail POS System</p>
             <div className="mt-3 space-y-0.5">
-              <p className="text-[11px] font-black text-gray-800">فاتورة بيع ضريبية</p>
+              <p className="text-[11px] font-black text-gray-800">فاتورة بيع</p>
               <p className="text-[10px] text-gray-500">رقم الفاتورة: {invoice.invoiceNumber || invoice.id}</p>
               <p className="text-[10px] text-gray-500">التاريخ: {new Date(invoice.createdAt || invoice.date).toLocaleString('ar-EG')}</p>
             </div>
@@ -103,19 +103,17 @@ const InvoicePaper = ({ invoice, isConfirmed }) => {
           {/* Calculations */}
           <div className="border-t border-dashed border-gray-200 pt-3 space-y-1 text-[11px]">
             <div className="flex justify-between">
-              <span className="text-gray-500">المجموع الفرعي:</span>
+              <span className="text-gray-500">السعر الأصلي (قبل الخصم):</span>
               <span className="tabular-nums">{invoice.subtotal?.toFixed(2)} ج.م</span>
             </div>
-            <div className="flex justify-between text-red-500">
-              <span>إجمالي الخصم:</span>
-              <span className="tabular-nums">-{invoice.discount?.toFixed(2)} ج.م</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">الضريبة (14%):</span>
-              <span className="tabular-nums">{invoice.tax?.toFixed(2)} ج.م</span>
-            </div>
+            {invoice.discount > 0 && (
+              <div className="flex justify-between text-red-500">
+                <span>إجمالي الخصم التوفيري:</span>
+                <span className="tabular-nums">-{invoice.discount?.toFixed(2)} ج.م</span>
+              </div>
+            )}
             <div className="flex justify-between text-base font-black text-gray-900 border-t border-gray-100 pt-2 mt-2">
-              <span>الإجمالي النهائي:</span>
+              <span>المطلوب سداده:</span>
               <span className="tabular-nums">{invoice.total?.toFixed(2)} ج.م</span>
             </div>
           </div>
@@ -217,13 +215,12 @@ export default function BillingPage() {
     if (!product) return { subtotal: 0, discount: 0, tax: 0, total: 0 };
     const subtotal = product.sellPrice * quantity;
     const baseDiscount = (product.discount || 0) * quantity;
-    const itemTotalAfterBase = subtotal - baseDiscount;
     
+    // finalDiscount combines product's fixed discount and the optional manual negotiation discount.
     const finalDiscount = baseDiscount + Number(manualDiscountVal);
-    const itemTotal = subtotal - finalDiscount;
+    const total = Math.max(0, subtotal - finalDiscount);
     
-    const tax = Math.max(0, itemTotal) * 0.14;
-    return { subtotal, discount: finalDiscount, tax, total: Math.max(0, itemTotal + tax) };
+    return { subtotal, discount: finalDiscount, tax: 0, total };
   };
 
   const handleConfirmCheckout = async () => {

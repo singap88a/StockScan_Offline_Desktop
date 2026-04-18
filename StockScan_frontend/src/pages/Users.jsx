@@ -140,7 +140,7 @@ export default function Users() {
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-xs shadow-md">
-                          {u.name.substring(0, 2)}
+                          {u.name ? u.name.substring(0, 2) : '??'}
                         </div>
                         <span className="font-bold text-gray-800 text-sm">{u.name}</span>
                         {u._id === currentUser?._id && (
