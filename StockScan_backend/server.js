@@ -48,8 +48,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // ─── Frontend Setup ─────────────────────────────────────────────────────────────
+const fs = require('fs');
 const frontendDistPath = path.join(__dirname, '../StockScan_frontend/dist');
-app.use(express.static(frontendDistPath));
+if (fs.existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+}
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/auth',      require('./routes/auth.routes'));
@@ -70,7 +73,12 @@ app.use((req, res, next) => {
   if (req.originalUrl.startsWith('/api')) {
     res.status(404).json({ success: false, message: `المسار ${req.originalUrl} غير موجود` });
   } else {
-    res.sendFile(path.join(frontendDistPath, 'index.html'));
+    // Return frontend if it exists, otherwise just return a success message (for Vercel API-only deployments)
+    if (fs.existsSync(path.join(frontendDistPath, 'index.html'))) {
+      res.sendFile(path.join(frontendDistPath, 'index.html'));
+    } else {
+      res.status(200).send(`StockScan Backend API is online. Environment: ${process.env.NODE_ENV}`);
+    }
   }
 });
 
