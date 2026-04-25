@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://stock-scan-offline-desktop.vercel.app/api';
 // http://localhost:5000
-// https://stock-scan-backend.vercel.app
+// https://stock-scan-offline-desktop.vercel.app/
 // Create axios instance
 const api = axios.create({
   baseURL: BASE_URL,
