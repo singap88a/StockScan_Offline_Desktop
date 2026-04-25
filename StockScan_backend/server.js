@@ -20,7 +20,14 @@ const app = express();
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'file://'],
+  origin: [
+    'http://localhost:5173', 
+    'http://localhost:3000', 
+    'http://127.0.0.1:5173', 
+    'file://',
+    'https://stock-scan-offline-desktop-uvi5.vercel.app',
+    'https://stock-scan-offline-desktop.vercel.app'
+  ],
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
